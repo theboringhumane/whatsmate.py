@@ -6,8 +6,7 @@ class WhatsMate:
     def __init__(self, token, phone_number_id):
         self.token = token
         self.phone_number_id = phone_number_id
-        self.base_url = "https://graph.facebook.com/v14.0"
-        self.v15_base_url = "https://graph.facebook.com/v15.0"
+        self.base_url = "https://graph.facebook.com/v19.0"
         self.url = f"{self.base_url}/{phone_number_id}/messages"
         self.headers = {
             'Authorization': f'Bearer {self.token}',
@@ -17,7 +16,7 @@ class WhatsMate:
     def say(self, message, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "text",
+            "type": "text",
             "text": {
                 "body": message,
                 "preview_url": preview_url
@@ -25,13 +24,22 @@ class WhatsMate:
             "recipient_type": recipient_type,
             "to": phone_number
         }
-        response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        try:
+            response = requests.post(self.url, headers=self.headers, json=payload)
+            return self.process_response(response.json())
+        except Exception as e:
+            raise e
+
+    @staticmethod
+    def process_response(response):
+        if 'error' in response:
+            raise Exception(response['error']['message'])
+        return response
 
     def send_image(self, image_url, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "image",
+            "type": "image",
             "image": {
                 "link": image_url,
                 "preview_url": preview_url
@@ -40,12 +48,12 @@ class WhatsMate:
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     def send_video(self, video_url, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "video",
+            "type": "video",
             "video": {
                 "link": video_url,
                 "preview_url": preview_url
@@ -54,12 +62,12 @@ class WhatsMate:
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     def send_audio(self, audio_url, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "audio",
+            "type": "audio",
             "audio": {
                 "link": audio_url,
                 "preview_url": preview_url
@@ -68,26 +76,27 @@ class WhatsMate:
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
-    def send_file(self, file_url, phone_number, recipient_type="individual", preview_url=None):
+    def send_file(self, file_url, phone_number, recipient_type="individual", caption=None, filename=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "file",
-            "file": {
+            "type": "document",
+            "document": {
                 "link": file_url,
-                "preview_url": preview_url
+                "caption": caption,
+                'filename': filename
             },
             "recipient_type": recipient_type,
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     def send_location(self, latitude, longitude, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "location",
+            "type": "location",
             "location": {
                 "latitude": latitude,
                 "longitude": longitude,
@@ -97,13 +106,13 @@ class WhatsMate:
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     def send_contact(self, contact_name, contact_phone_number, phone_number, recipient_type="individual",
                      preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "contact",
+            "type": "contact",
             "contact": {
                 "name": contact_name,
                 "phone_number": contact_phone_number,
@@ -113,12 +122,12 @@ class WhatsMate:
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     def send_sticker(self, sticker_id, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "sticker",
+            "type": "sticker",
             "sticker": {
                 "id": sticker_id,
                 "preview_url": preview_url
@@ -127,18 +136,18 @@ class WhatsMate:
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     def send_template(self, template, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "template",
+            "type": "template",
             "template": template,
             "recipient_type": recipient_type,
             "to": phone_number
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     def send_button_template(self, text, buttons, phone_number, recipient_type="individual", preview_url=None):
         template = {
@@ -192,7 +201,7 @@ class WhatsMate:
     def reply(self, message_id, text, phone_number, recipient_type="individual", preview_url=None):
         payload = {
             "messaging_product": "whatsapp",
-            type: "text",
+            "type": "text",
             "text": {
                 "body": text,
                 "preview_url": preview_url
@@ -202,7 +211,7 @@ class WhatsMate:
             "message_id": message_id
         }
         response = requests.post(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     # send a message to a group
     def send_to_group(self, group_id, text, preview_url=None):
@@ -225,6 +234,6 @@ class WhatsMate:
             "message_id": message_id
         }
         response = requests.put(self.url, headers=self.headers, json=payload)
-        return response.json()
+        return self.process_response(response.json())
 
     # send a message to a contact

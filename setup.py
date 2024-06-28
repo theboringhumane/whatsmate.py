@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='whatsmate',
-    version='1.2',
+    version='1.3',
     description='The ultimate WhatsApp Wrapper for Python',
     author='Harsh Vardhan Goswami',
     long_description=long_description,

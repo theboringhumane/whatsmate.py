@@ -84,7 +84,8 @@ Sends a file to the recipient.
 - **`file_url`** (str): The URL of the file to be sent.
 - **`phone_number`** (str): The phone number of the recipient.
 - **`recipient_type`** (str, optional): The recipient type. Defaults to "individual".
-- **`preview_url`** (str, optional): The URL of the preview image to be sent with the message. Defaults to None.
+- **`caption`** (str, optional): The caption needs to be sent with the file. Defaults to None.
+- **`filename`** (str, optional): The name to be set to the file/document. Defaults to None.
 
 **Returns:**
 
