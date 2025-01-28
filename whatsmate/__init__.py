@@ -6,7 +6,7 @@ class WhatsMate:
     def __init__(self, token, phone_number_id):
         self.token = token
         self.phone_number_id = phone_number_id
-        self.base_url = "https://graph.facebook.com/v19.0"
+        self.base_url = "https://graph.facebook.com/v22.0"
         self.url = f"{self.base_url}/{phone_number_id}/messages"
         self.headers = {
             'Authorization': f'Bearer {self.token}',
