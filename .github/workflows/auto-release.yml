@@ -77,4 +77,4 @@ jobs:
           gh release create ${NEW_VERSION} \
             --title "${DOCKERLIKE_RELEASE_NAME}" \
             --notes-file release_notes.md \
-            --target sudo
+            --target master

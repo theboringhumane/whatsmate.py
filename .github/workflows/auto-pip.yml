@@ -31,7 +31,7 @@ jobs:
           git fetch --tags
           LATEST_TAG=$(git describe --tags --abbrev=0)
           # Update versions in files
-          sed -i "s/version=\".*\"/version=\"${LATEST_TAG}\"/" pyproject.toml
+          sed -i "s/version=\".*\"/version=\"${LATEST_TAG}\"/" setup.py
 
       - name: Build package
         run: python -m build
